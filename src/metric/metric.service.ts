@@ -1,7 +1,7 @@
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bullmq';
-import { METRIC_QUEUE_NAME } from './constants';
+import { METRIC_JOB_NAME, METRIC_QUEUE_NAME } from './constants';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MetricEntity } from './metric.entity';
@@ -15,7 +15,7 @@ export class MetricService {
   ) {}
 
   async addJob(metric: string): Promise<void> {
-    await this.metricQueue.add('store-metric', metric);
+    await this.metricQueue.add(METRIC_JOB_NAME, metric);
   }
 
   async storeMetric(metric: string): Promise<void> {

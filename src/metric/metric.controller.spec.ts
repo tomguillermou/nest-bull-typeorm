@@ -32,16 +32,16 @@ describe('MetricController', () => {
 
   it('should add a job when creating a metric', async () => {
     // Arrange
-    const metric = 'metric value';
+    const metricValue = 'metric value';
 
     // Act
-    await controller.createMetric(metric);
+    await controller.createMetric(metricValue);
 
     // Assert
     await expect(queue.getWaiting()).resolves.toContainEqual(
       expect.objectContaining({
         name: 'store-metric',
-        data: metric,
+        data: metricValue,
       }),
     );
   });

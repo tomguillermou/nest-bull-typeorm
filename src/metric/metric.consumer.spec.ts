@@ -5,7 +5,7 @@ import { getQueueToken } from '@nestjs/bullmq';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { METRIC_QUEUE_NAME } from './constants';
+import { METRIC_JOB_NAME, METRIC_QUEUE_NAME } from './constants';
 import { MetricEntity } from './metric.entity';
 import { MetricModule } from './metric.module';
 
@@ -37,8 +37,8 @@ describe('MetricConsumer', () => {
 
   it('should store metric', async () => {
     // Arrange
-    const metric = 'metric value';
-    const job = await queue.add('store-metric', 'metric value');
+    const metricValue = 'metric value';
+    const job = await queue.add(METRIC_JOB_NAME, metricValue);
 
     // Act
     await job.waitUntilFinished(new QueueEvents(METRIC_QUEUE_NAME));
@@ -49,7 +49,7 @@ describe('MetricConsumer', () => {
     );
 
     await expect(metricRepository.find()).resolves.toContainEqual(
-      expect.objectContaining({ value: metric }),
+      expect.objectContaining({ value: metricValue }),
     );
   });
 });
